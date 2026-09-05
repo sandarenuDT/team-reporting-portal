@@ -7,8 +7,6 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
-// Lightweight row shape for report history tables and the manager
-// dashboard's filterable list — avoids loading full nested content.
 @Getter
 @Builder
 @AllArgsConstructor

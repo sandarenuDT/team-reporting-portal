@@ -10,8 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-// Linked to a specific ReportVersion so the UI can show exactly which
-// version of the report a given comment was made against.
 @Entity
 @Table(name = "review_comments")
 @Getter

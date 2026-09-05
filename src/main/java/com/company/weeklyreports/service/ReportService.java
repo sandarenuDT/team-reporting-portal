@@ -28,9 +28,7 @@ public class ReportService {
     private final UserRepository userRepository;
     private final ReviewCommentRepository reviewCommentRepository;
 
-    // ---------------------------------------------------------------
-    // CREATE — a fresh weekly report, always starts as DRAFT, v1.
-    // ---------------------------------------------------------------
+
     @Transactional
     public ReportResponse createDraft(CustomUserDetails currentUser, ReportContentRequest request) {
         User user = userRepository.findById(currentUser.getUserId())
@@ -66,15 +64,7 @@ public class ReportService {
         return toResponse(report, version);
     }
 
-    // ---------------------------------------------------------------
-    // EDIT — only while DRAFT or NEEDS_CORRECTION, only by the owner.
-    //
-    // If the current version hasn't been submitted yet (still DRAFT),
-    // we edit it in place. If it HAS been submitted before (we're
-    // editing after a NEEDS_CORRECTION bounce-back), the already-
-    // reviewed version must stay frozen for history, so we create a
-    // brand new version instead of mutating it.
-    // ---------------------------------------------------------------
+
     @Transactional
     public ReportResponse updateDraft(CustomUserDetails currentUser, Long reportId, ReportContentRequest request) {
         Report report = reportRepository.findById(reportId)
@@ -97,13 +87,13 @@ public class ReportService {
         ReportVersion versionToEdit;
 
         if (current == null || current.getSubmittedAt() == null) {
-            // Still an unsubmitted draft — safe to edit in place.
+            // unsubmitted draft
             versionToEdit = current != null ? current : ReportVersion.builder()
                     .report(report)
                     .versionNumber(1)
                     .build();
         } else {
-            // Previously submitted and reviewed — freeze it, start a new version.
+            // Previously submitted and reviewed
             int nextVersionNumber = current.getVersionNumber() + 1;
             versionToEdit = ReportVersion.builder()
                     .report(report)
@@ -120,9 +110,8 @@ public class ReportService {
         return toResponse(report, versionToEdit);
     }
 
-    // ---------------------------------------------------------------
-    // SUBMIT — freezes the current version's content and flips status.
-    // ---------------------------------------------------------------
+
+    // SUBMIT
     @Transactional
     public ReportResponse submit(CustomUserDetails currentUser, Long reportId) {
         Report report = reportRepository.findById(reportId)
@@ -148,10 +137,7 @@ public class ReportService {
         return toResponse(report, current);
     }
 
-    // ---------------------------------------------------------------
-    // READ — single report detail. Owner or any manager may view;
-    // only the owner's own reports are reachable for a TEAM_MEMBER.
-    // ---------------------------------------------------------------
+
     @Transactional(readOnly = true)
     public ReportResponse findById(CustomUserDetails currentUser, Long reportId) {
         Report report = reportRepository.findById(reportId)
@@ -167,10 +153,6 @@ public class ReportService {
         return toResponse(report, report.getCurrentVersion());
     }
 
-    // ---------------------------------------------------------------
-    // Version history for a report — used by the manager's "view past
-    // versions" panel and by the team member to see their own history.
-    // ---------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<ReportVersionResponse> findVersionHistory(CustomUserDetails currentUser, Long reportId) {
         Report report = reportRepository.findById(reportId)
@@ -187,9 +169,6 @@ public class ReportService {
                 .toList();
     }
 
-    // ---------------------------------------------------------------
-    // Own report history — team member's "report history" page.
-    // ---------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<ReportSummaryResponse> findMyReports(CustomUserDetails currentUser) {
         return reportRepository.findByUserIdOrderByWeekStartDesc(currentUser.getUserId()).stream()
@@ -197,12 +176,6 @@ public class ReportService {
                 .toList();
     }
 
-    // ---------------------------------------------------------------
-    // Manager dashboard — filtered + paginated list across the team.
-    // A TEAM_MEMBER can never reach this method (enforced at controller
-    // level with @PreAuthorize, defense-in-depth here too is fine but
-    // the role gate belongs on the endpoint).
-    // ---------------------------------------------------------------
     @Transactional(readOnly = true)
     public Page<ReportSummaryResponse> findAllFiltered(
             Long userId, Long projectId, ReportStatus status,
@@ -218,9 +191,6 @@ public class ReportService {
         return reportRepository.findAll(spec, pageable).map(this::toSummaryResponse);
     }
 
-    // ---------------------------------------------------------------
-    // Helpers
-    // ---------------------------------------------------------------
     private void assertOwner(CustomUserDetails currentUser, Report report) {
         if (!report.getUser().getId().equals(currentUser.getUserId())) {
             throw new AccessDeniedCustomException("You can only modify your own reports.");

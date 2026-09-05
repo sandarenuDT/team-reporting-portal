@@ -7,8 +7,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
-// Full detail view — used by both team member (own report) and
-// manager (report detail / review page).
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -21,6 +20,6 @@ public class ReportResponse {
     private LocalDate weekStart;
     private LocalDate weekEnd;
     private ReportStatus status;
-    private String latestReviewerComment; // convenience field for quick display
+    private String latestReviewerComment;
     private ReportVersionResponse currentVersion;
 }

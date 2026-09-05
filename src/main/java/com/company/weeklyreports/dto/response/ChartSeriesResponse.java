@@ -6,8 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 
-// Generic {label, value} pair list — reused across every chart endpoint
-// so the frontend can feed the same shape straight into Recharts/Chart.js.
+
 @Getter
 @Builder
 @AllArgsConstructor

@@ -12,8 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-// One row per team member per week — holds ONLY the current status.
-// Actual content lives in ReportVersion so history is never overwritten.
+
 @Entity
 @Table(
         name = "reports",

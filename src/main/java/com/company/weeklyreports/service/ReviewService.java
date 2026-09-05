@@ -24,12 +24,7 @@ public class ReviewService {
     private final UserRepository userRepository;
     private final ReportService reportService; // reuse toResponse-style mapping via findById
 
-    // ---------------------------------------------------------------
-    // A manager can only act on a report that is currently SUBMITTED.
-    // The action is recorded against report.getCurrentVersion() —
-    // this is what lets the UI later show "which version was this
-    // comment made against" without any extra bookkeeping.
-    // ---------------------------------------------------------------
+
     @Transactional
     public ReportResponse review(CustomUserDetails manager, Long reportId, ReviewActionRequest request) {
         Report report = reportRepository.findById(reportId)
@@ -66,16 +61,9 @@ public class ReviewService {
                 : ReportStatus.NEEDS_CORRECTION);
         reportRepository.save(report);
 
-        // Managers are never allowed to touch report CONTENT — note that
-        // nothing above writes to Task/Blocker/Achievement/ReportVersion
-        // content fields. Only status + a new ReviewComment row change.
         return reportService.findById(manager, reportId);
     }
 
-    // ---------------------------------------------------------------
-    // Bonus requirement: short history of past review comments, not
-    // just the latest one — surfaced next to the version history panel.
-    // ---------------------------------------------------------------
     @Transactional(readOnly = true)
     public List<ReviewCommentResponse> findCommentHistory(CustomUserDetails currentUser, Long reportId) {
         Report report = reportRepository.findById(reportId)

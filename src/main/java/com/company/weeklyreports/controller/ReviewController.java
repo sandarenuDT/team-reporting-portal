@@ -30,8 +30,6 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.review(manager, reportId, request));
     }
 
-    // Comment history is useful to team members too, so relax this one
-    // endpoint back down to any authenticated user via method override.
     @GetMapping("/history")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ReviewCommentResponse>> history(

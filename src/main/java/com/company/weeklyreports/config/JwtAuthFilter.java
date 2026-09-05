@@ -17,9 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// Runs once per request, before Spring Security's own auth checks.
-// Pulls the Bearer token, validates it, and — if valid — tells Spring
-// Security "this request is authenticated as this user with this role".
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -47,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             email = jwtUtil.extractEmail(token);
         } catch (Exception e) {
-            filterChain.doFilter(request, response); // invalid token -> stays unauthenticated
+            filterChain.doFilter(request, response); // (invalid token) -> stays unauthenticated
             return;
         }
 

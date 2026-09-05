@@ -13,7 +13,7 @@ import java.util.List;
 public class ReportVersionResponse {
     private Long id;
     private Integer versionNumber;
-    private LocalDateTime submittedAt; // null if still a draft
+    private LocalDateTime submittedAt;
     private String tasksPlannedNextWeek;
     private String notes;
     private List<TaskResponse> tasks;

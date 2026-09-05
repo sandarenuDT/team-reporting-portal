@@ -35,9 +35,7 @@ public class UserService {
         return userRepository.findByRole(Role.TEAM_MEMBER).stream().map(this::toResponse).toList();
     }
 
-    // Admin "invite" — same shape as self-registration, kept as a
-    // separate method so the two flows can diverge later (e.g. sending
-    // an actual invite email instead of an immediate password).
+
     @Transactional
     public UserResponse inviteUser(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -62,8 +60,6 @@ public class UserService {
         return toResponse(userRepository.save(user));
     }
 
-    // Soft-remove — deactivating instead of deleting preserves all of
-    // that member's past reports for the manager's history/dashboard.
     @Transactional
     public void deactivate(Long userId) {
         User user = userRepository.findById(userId)
@@ -80,7 +76,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // Backs the team-member profile page's "basic stats" panel.
     @Transactional(readOnly = true)
     public UserStatsResponse getStats(Long userId) {
         var reports = reportRepository.findByUserIdOrderByWeekStartDesc(userId);

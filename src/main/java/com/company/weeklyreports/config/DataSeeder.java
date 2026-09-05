@@ -13,8 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// Only runs when the "seed" profile is active (see run instructions
-// below) so it never accidentally re-seeds a real environment.
 @Component
 @Profile("seed")
 @RequiredArgsConstructor

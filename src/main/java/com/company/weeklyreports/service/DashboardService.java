@@ -80,9 +80,6 @@ public class DashboardService {
 
     @Transactional(readOnly = true)
     public List<ChartSeriesResponse> getStatusByMember(LocalDate weekStart) {
-        // Encoded as one numeric value per member so the frontend can
-        // color-map status -> value itself (e.g. 0=draft,1=submitted...);
-        // simplest to keep the label/value contract consistent everywhere.
         return reportRepository.statusByMemberForWeek(weekStart).stream()
                 .map(row -> ChartSeriesResponse.builder()
                         .label((String) row[0])

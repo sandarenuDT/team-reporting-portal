@@ -50,10 +50,6 @@ public class ProjectService {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Project not found: " + id));
 
-        // Soft delete — reports already reference this project via FK,
-        // so a hard delete would either fail (FK constraint) or cascade
-        // and destroy report history. Deactivating keeps history intact
-        // while hiding it from "add report" dropdowns going forward.
         project.setActive(false);
         projectRepository.save(project);
     }

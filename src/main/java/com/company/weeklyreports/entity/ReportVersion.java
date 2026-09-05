@@ -12,8 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-// A frozen snapshot of report content at one point in its review cycle.
-// Every submit/resubmit creates a NEW version instead of mutating an old one.
+
 @Entity
 @Table(
         name = "report_versions",

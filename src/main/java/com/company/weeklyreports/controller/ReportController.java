@@ -26,7 +26,7 @@ import java.util.List;
 public class ReportController {
 
     private final ReportService reportService;
-
+    @PreAuthorize("hasRole('TEAM_MEMBER')")
     @PostMapping
     public ResponseEntity<ReportResponse> create(
             @AuthenticationPrincipal CustomUserDetails currentUser,
@@ -34,6 +34,7 @@ public class ReportController {
         return ResponseEntity.ok(reportService.createDraft(currentUser, request));
     }
 
+    @PreAuthorize("hasRole('TEAM_MEMBER')")
     @PutMapping("/{id}")
     public ResponseEntity<ReportResponse> update(
             @AuthenticationPrincipal CustomUserDetails currentUser,
@@ -42,6 +43,7 @@ public class ReportController {
         return ResponseEntity.ok(reportService.updateDraft(currentUser, id, request));
     }
 
+    @PreAuthorize("hasRole('TEAM_MEMBER')")
     @PostMapping("/{id}/submit")
     public ResponseEntity<ReportResponse> submit(
             @AuthenticationPrincipal CustomUserDetails currentUser,
@@ -49,14 +51,14 @@ public class ReportController {
         return ResponseEntity.ok(reportService.submit(currentUser, id));
     }
 
-    // Team member's own history page
+    // member's own history page
     @GetMapping("/mine")
     public ResponseEntity<List<ReportSummaryResponse>> findMine(
             @AuthenticationPrincipal CustomUserDetails currentUser) {
         return ResponseEntity.ok(reportService.findMyReports(currentUser));
     }
 
-    // Report detail — reachable by the owner, or by any manager
+    // Report detail
     @GetMapping("/{id}")
     public ResponseEntity<ReportResponse> findById(
             @AuthenticationPrincipal CustomUserDetails currentUser,
@@ -64,7 +66,7 @@ public class ReportController {
         return ResponseEntity.ok(reportService.findById(currentUser, id));
     }
 
-    // Version history panel
+    // Version history
     @GetMapping("/{id}/versions")
     public ResponseEntity<List<ReportVersionResponse>> findVersions(
             @AuthenticationPrincipal CustomUserDetails currentUser,
@@ -72,7 +74,7 @@ public class ReportController {
         return ResponseEntity.ok(reportService.findVersionHistory(currentUser, id));
     }
 
-    // Manager dashboard's filterable, paginated team-wide list
+    // Manager dashboard
     @GetMapping
     @PreAuthorize("hasRole('MANAGER')")
     public ResponseEntity<Page<ReportSummaryResponse>> findAll(

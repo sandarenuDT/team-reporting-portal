@@ -10,9 +10,9 @@ import lombok.Getter;
 public class DashboardMetricsResponse {
     private long totalMembers;
     private long submittedThisWeek;
-    private long pendingThisWeek;      // not yet started for this week
-    private long lateThisWeek;         // draft/needs_correction past week end
+    private long pendingThisWeek;
+    private long lateThisWeek;
     private long needsCorrectionCount;
     private long openBlockersCount;
-    private double complianceRatePct;  // submitted+approved / totalMembers, rounded
+    private double complianceRatePct;
 }

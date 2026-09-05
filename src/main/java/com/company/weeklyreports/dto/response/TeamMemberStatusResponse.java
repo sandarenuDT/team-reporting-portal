@@ -10,6 +10,6 @@ import lombok.Getter;
 public class TeamMemberStatusResponse {
     private Long userId;
     private String userName;
-    private Long reportId;      // null if no report exists for this week
-    private String status;      // DRAFT / SUBMITTED / NEEDS_CORRECTION / APPROVED / NOT_STARTED
+    private Long reportId;
+    private String status;
 }

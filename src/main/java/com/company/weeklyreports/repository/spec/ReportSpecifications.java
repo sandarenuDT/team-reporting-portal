@@ -6,8 +6,6 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 
-// Composable filters for the manager dashboard's report list —
-// member, project, status, and date range, combined with .and().
 public class ReportSpecifications {
 
     public static Specification<Report> hasUserId(Long userId) {

@@ -18,8 +18,6 @@ public class ProjectController {
 
     private final ProjectService projectService;
 
-    // Both roles need to read the project list — team members pick a
-    // project when filing a report, managers use it for filtering.
     @GetMapping
     public ResponseEntity<List<ProjectResponse>> findAll() {
         return ResponseEntity.ok(projectService.findAllActive());

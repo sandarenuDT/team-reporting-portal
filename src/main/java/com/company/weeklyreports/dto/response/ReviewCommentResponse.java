@@ -15,6 +15,6 @@ public class ReviewCommentResponse {
     private ReviewAction action;
     private String comment;
     private String reviewerName;
-    private Integer reviewedVersionNumber; // which version this comment was made against
+    private Integer reviewedVersionNumber;
     private LocalDateTime createdAt;
 }
